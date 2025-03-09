@@ -51,10 +51,10 @@ resource "aws_security_group" "web_access" {
 # Create EC2 Instance for Web Application
 resource "aws_instance" "app_server" {
   ami                         = "ami-0c614dee691cbbf37"
-  instance_type               = "t2.micro"
+  instance_type               = "t2.medium"
   subnet_id                   = data.aws_subnet.primary_subnet.id
   vpc_security_group_ids      = [aws_security_group.web_access.id]
-  associate_public_ip_address = true
+  associate_public_ip_address = true  # Keep this for initial assignment
   key_name                    = "vockey" # Ensure you have this key pair
 
   # Specify root volume size (20GB)
@@ -93,9 +93,23 @@ resource "aws_instance" "app_server" {
   }
 }
 
+# Allocate an Elastic IP (EIP) for the EC2 Instance
+resource "aws_eip" "web_eip" {
+  domain = "vpc"
+  tags = {
+    Name = "WebApp-EIP"
+  }
+}
+
+# Associate the Elastic IP with the EC2 Instance
+resource "aws_eip_association" "web_eip_assoc" {
+  instance_id   = aws_instance.app_server.id
+  allocation_id = aws_eip.web_eip.id
+}
+
 # Create ECR Repository for Web Application
 resource "aws_ecr_repository" "web_repository" {
-  name = "webapp-Assignment2"
+  name = "webapp-assignment2"
 
   tags = {
     Project   = "Deployment-Task"
@@ -105,7 +119,7 @@ resource "aws_ecr_repository" "web_repository" {
 
 # Create ECR Repository for Database
 resource "aws_ecr_repository" "db_repository" {
-  name = "database-Assignment2"
+  name = "database-assignment2"
 
   tags = {
     Project   = "Deployment-Task"
