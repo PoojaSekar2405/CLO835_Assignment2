@@ -1,0 +1,11 @@
+metadata:
+  name: mysql-service
+  namespace: app-space
+spec:
+  selector:
+    app: mysql
+  ports:
+    - protocol: TCP
+      port: 3306  # Service port inside the cluster
+      targetPort: 3306  # Port where MySQL container is running
+  type: ClusterIP  # Internal service, not exposed to the internet

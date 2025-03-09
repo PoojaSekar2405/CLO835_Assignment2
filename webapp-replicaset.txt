@@ -1,0 +1,26 @@
+metadata:
+  name: webapp-replicaset
+  namespace: app-space
+  labels:
+    app: webapp-replicaset
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webapp-replicaset
+  template:
+    metadata:
+      labels:
+        app: webapp-replicaset
+    spec:
+      imagePullSecrets:
+      - name: ecr-secret
+      containers:
+      - name: webapp
+        image: 117426110282.dkr.ecr.us-east-1.amazonaws.com/webapp-assignment2:latest
+        ports:
+        - containerPort: 8080
+        command: ["python3", "app.py"]
+        env:
+        - name: DBHOST
+          value: "mysql-service"

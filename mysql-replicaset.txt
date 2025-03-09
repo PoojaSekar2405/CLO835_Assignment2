@@ -1,0 +1,25 @@
+metadata:
+  name: mysql-replica
+  namespace: app-space
+  labels:
+    app: mysql-replica
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mysql-replica
+  template:
+    metadata:
+      labels:
+        app: mysql-replica
+    spec:
+      imagePullSecrets:
+      - name: ecr-secret
+      containers:
+      - name: mysql
+        image: 117426110282.dkr.ecr.us-east-1.amazonaws.com/database-assignment2:latest
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "rootpassword"

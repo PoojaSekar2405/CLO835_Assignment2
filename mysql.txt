@@ -1,0 +1,27 @@
+metadata:
+  name: mysql-pod
+  namespace: app-space
+  labels:
+    app: mysql
+spec:
+  imagePullSecrets:
+  - name: ecr-secret
+  containers:
+  - name: mysql
+    image: 117426110282.dkr.ecr.us-east-1.amazonaws.com/database-assignment2:latest
+    ports:
+    - containerPort: 3306
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: "rootpassword"
+  
+
+
+
+
+
+kubectl create secret docker-registry ecr-secret \
+  --docker-server=117426110282.dkr.ecr.us-east-1.amazonaws.com \
+  --docker-username=AWS \
+  --docker-password=$(aws ecr get-login-password --region us-east-1) \
+  --namespace app-space

@@ -1,0 +1,12 @@
+metadata:
+  name: webapp-service
+  namespace: app-space
+spec:
+  selector:
+    app: webapp
+  ports:
+    - protocol: TCP
+      port: 8080        # Service port inside the cluster
+      targetPort: 8080  # Port where the web app container is running
+      nodePort: 30000   # Expose on this port outside the cluster
+  type: NodePort  # Exposes the service to the internet

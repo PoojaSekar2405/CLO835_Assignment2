@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  namespace: app-space
+  labels:
+    app: webapp-dep
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webapp
+  strategy:
+    type: Recreate  # Ensures all pods start at the same time
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      imagePullSecrets:
+      - name: ecr-secret
+      containers:
+      - name: webapp
+        image: 117426110282.dkr.ecr.us-east-1.amazonaws.com/webapp-assignment2:latest
+        ports:
+        - containerPort: 8080
+        command: ["python3", "app.py"]
+        env:
+        - name: DBHOST
+          value: "mysql-service"
+        - name: DBPORT
+          value: "3306"
+        - name: DBUSER
+          value: "root"
+        - name: DATABASE
+          value: "employees"
+        - name: DBPWD
+          value: "rootpassword"

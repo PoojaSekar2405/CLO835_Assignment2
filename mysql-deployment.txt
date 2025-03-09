@@ -1,0 +1,26 @@
+metadata:
+  name: mysql-depl
+  namespace: app-space
+  labels:
+    app: mysql-depl
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mysql-depl
+  strategy:
+    type: Recreate  # Ensures all pods start at the same time
+  template:
+    metadata:
+      labels:
+        app: mysql-depl
+    spec:
+      imagePullSecrets:
+      - name: ecr-secret
+      containers:
+      - name: mysql
+        image: 117426110282.dkr.ecr.us-east-1.amazonaws.com/database-assignment2:latest
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
