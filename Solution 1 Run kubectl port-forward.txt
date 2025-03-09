@@ -1,35 +1,15 @@
 Solution 1: Run kubectl port-forward in the Background
-Stop the current process by pressing:
 
-objectivec
-Copy
-Edit
+kubectl port-forward --address 0.0.0.0 svc/webapp-service 30000:8080 -n app-space
+
 CTRL + Z
 This suspends the process.
 
 Move it to the background:
 
-bash
-Copy
-Edit
+
 bg
-Now, the process runs in the background, and you get the terminal back.
 
-Check active background jobs (optional):
-
-bash
-Copy
-Edit
-jobs -l
-Run your netstat command:
-
-bash
-Copy
-Edit
 sudo netstat -tulnp | grep 30000
-If you need to bring kubectl port-forward back to the foreground, use:
 
-bash
-Copy
-Edit
 fg
